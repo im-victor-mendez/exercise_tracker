@@ -1,7 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 
-const db = require('../database.js')
 const router = express.Router()
 
 router.use(bodyParser.urlencoded({ extended: true }))
@@ -31,9 +30,9 @@ router.post('/', async (req, res) => {
 })
 
 router.get('/', async (req, res) => {
-    const coll = await User.find({})
-    
-    res.send(coll)
+    const collection = await User.find({})
+
+    res.send(collection)
 })
 
 module.exports = router
