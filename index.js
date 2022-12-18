@@ -5,6 +5,10 @@ require('dotenv').config()
 
 app.use(cors())
 app.use(express.static('public'))
+
+/* Database */
+const database = require('./database.js')
+
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
 });
