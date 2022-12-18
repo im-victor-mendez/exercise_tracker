@@ -40,7 +40,7 @@ router.get('/', async (req, res) => {
 /* POST exercise */
 router.post('/:_id/exercises', async (req, res) => {
     const _id = req.params._id || req.body[':_id']
-    const username = await User.findById(_id).username
+    const user = await User.findById(_id)
 
     const { description, duration } = req.body
 
@@ -64,8 +64,9 @@ router.post('/:_id/exercises', async (req, res) => {
 
             console.log('Exercise saved')
 
+            //To fix response IDK :/
             res.json({
-                username,
+                username: user.username,
                 description,
                 duration,
                 date: date.toDateString(),
