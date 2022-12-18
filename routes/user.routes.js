@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 
+const db = require('../database.js')
 const router = express.Router()
 
 router.use(bodyParser.urlencoded({ extended: true }))
@@ -27,6 +28,12 @@ router.post('/', async (req, res) => {
     const _id = user._id
     
     res.json({ username, _id })
+})
+
+router.get('/', async (req, res) => {
+    const coll = await User.find({})
+    
+    res.send(coll)
 })
 
 module.exports = router
