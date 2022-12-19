@@ -54,9 +54,11 @@ router.post('/:_id/exercises', async (req, res) => {
         else date = new Date(date)
 
         const exercise = new Exercise({
+            username: user.username,
             description,
             duration,
-            date
+            date,
+            userId: _id
         })
 
         try {
@@ -65,7 +67,7 @@ router.post('/:_id/exercises', async (req, res) => {
             console.log('Exercise saved')
 
             //To fix response IDK :/
-            res.json({
+            res.send({
                 username: user.username,
                 description,
                 duration,
@@ -76,6 +78,40 @@ router.post('/:_id/exercises', async (req, res) => {
             console.error('Error saving exercise, please try again')
             res.json({ 'error': 'Error saving exercise, please try again' })
         }
+    }
+})
+
+/* GET User logs */
+router.get('/:_id/logs', async (req, res) => {
+    const _id = req.params._id
+
+    try {
+        const user = await User.findById(_id)
+        let exercises = await Exercise.find({ userId: _id })
+        exercises = exercises.map(
+            exercise => {
+                return {
+                    _id: exercise._id,
+                    username: exercise.username,
+                    description: exercise.description,
+                    duration: exercise.duration,
+                    date: exercise.date.toDateString(),
+                    userId: exercise.userId
+                }
+            }
+        )
+
+        const username = user.username
+
+        res.json({
+            username,
+            count : exercises.length,
+            _id,
+            log: exercises
+        })
+
+    } catch {
+        res.json({ 'error': 'User not founded' })
     }
 })
 
