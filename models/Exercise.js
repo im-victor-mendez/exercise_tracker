@@ -7,6 +7,10 @@ const { Schema } = require('mongoose')
  * @param {Date} date (Date, required), in case that don't bring us, use current date
  */
 const ExerciseSchema = new Schema({
+    username: {
+        type: String,
+        required: true
+    },
     description: {
         type: String,
         required: true
@@ -17,6 +21,10 @@ const ExerciseSchema = new Schema({
     },
     date: {
         type: Date,
+        required: true
+    },
+    userId: {
+        type: String,
         required: true
     }
 })
