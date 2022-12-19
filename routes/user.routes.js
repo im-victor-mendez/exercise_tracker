@@ -44,14 +44,20 @@ router.post('/:_id/exercises', async (req, res) => {
 
     const { description, duration } = req.body
 
-    if (!_id || !description || !duration) {
+    if (!_id || !description || !duration || !user) {
+        if (!user) res.json({ 'error': 'User not founded' })
         console.error('Exercise validation to save has been failed')
         res.json({ 'error': 'Exercise validation to save has been failed' })
+
     } else {
+
         let { date } = req.body
 
-        if (!date) date = new Date()
-        else date = new Date(date)
+        if (!date) date = new Date(); else {
+            date = date.split(/[-./]/)
+            
+            date = new Date(date[0], date[1] - 1, date[2])
+        }
 
         const exercise = new Exercise({
             username: user.username,
@@ -67,15 +73,27 @@ router.post('/:_id/exercises', async (req, res) => {
             console.log('Exercise saved')
 
             //To fix response IDK :/
-            res.send({
+            /**
+             * The response returned from POST /api/users/:_id/exercises will be the user object with
+             * the exercise fields added.
+             */
+            console.log({
                 username: user.username,
                 description,
                 duration,
                 date: date.toDateString(),
-                _id
+                _id: user._id.toHexString()
+            })
+            res.json({
+                username: user.username,
+                description,
+                duration,
+                date: date.toDateString(),
+                _id: user._id.toHexString()
             })
         } catch {
             console.error('Error saving exercise, please try again')
+            console.log(user._id.toHexString())
             res.json({ 'error': 'Error saving exercise, please try again' })
         }
     }
