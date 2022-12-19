@@ -85,9 +85,19 @@ router.post('/:_id/exercises', async (req, res) => {
 router.get('/:_id/logs', async (req, res) => {
     const _id = req.params._id
 
+    /* Date filters */
+    let { from, to, limit } = req.query
+    let filter = { userId: _id }
+    let dateFilter = {}
+
+    if (from) dateFilter['$gte'] = new Date(from)
+    if (to) dateFilter['$lte'] = new Date(to)
+    if (from || to) filter.dateFilter = dateFilter
+    if (!limit) limit = 100
+
     try {
         const user = await User.findById(_id)
-        let exercises = await Exercise.find({ userId: _id })
+        let exercises = await Exercise.find(filter).limit(limit)
         exercises = exercises.map(
             exercise => {
                 return {
