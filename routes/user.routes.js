@@ -72,22 +72,10 @@ router.post('/:_id/exercises', async (req, res) => {
 
             console.log('Exercise saved')
 
-            //To fix response IDK :/
-            /**
-             * The response returned from POST /api/users/:_id/exercises will be the user object with
-             * the exercise fields added.
-             */
-            console.log({
-                username: user.username,
-                description,
-                duration,
-                date: date.toDateString(),
-                _id: user._id.toHexString()
-            })
             res.json({
                 username: user.username,
                 description,
-                duration,
+                duration: parseFloat(duration),
                 date: date.toDateString(),
                 _id: user._id.toHexString()
             })
